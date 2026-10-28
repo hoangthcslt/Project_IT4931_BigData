@@ -24,15 +24,11 @@ Dữ liệu được trích xuất từ cổng thông tin chính thống của *
 
 ```
 data/archive/
-├── turnstile_*.csv                  # 16 tệp nhật ký cảm biến theo tuần (160102 -> 160416, ~390 MB)
-├── stops.csv                        # Tọa độ địa lý chuẩn GTFS (1.503 dòng, gồm 380 ga cha và platform N/S)
-├── MTA_Performance_Agencies.csv    # Bảng KPI đánh giá chất lượng vận hành MTA (2008 - 2017, ~57 MB, ISO-8859-1)
-├── Performance-MetaData.csv        # Mô tả chi tiết chỉ số và từ điển dữ liệu KPI
-└── NYC_Transit/
-    ├── turnstile_*.txt              # 27 tệp chuỗi thời gian trọn vẹn 6 tháng (160102 -> 160702, ~656 MB, 5.2M dòng)
-    ├── MTA_StationLocations.csv     # Danh mục chuẩn 493 ga tàu điện ngầm NYC (Station ID, Complex ID, Coordinates)
-    ├── MTA_Performance_NYCT.csv     # Bảng KPI trích riêng cho phân hệ NYC Subway & Bus (33.3 MB)
-    └── GTFS Specification/          # routes.txt, trips.txt, stop_times.txt, shapes.txt (chuẩn lịch trình GTFS)
+├── MTA_StationLocations.csv         # Danh mục chuẩn 493 ga tàu điện ngầm NYC (Station ID, Complex ID, Coordinates)
+├── TurnstileData/
+│   └── turnstile_*.txt              # 27 tệp chuỗi thời gian trọn vẹn 6 tháng (160102 -> 160702, ~656 MB, 5.2M dòng)
+├── NYC_TransitSubway/               # 9 tệp chuẩn GTFS (routes.txt, trips.txt, stop_times.txt, stops.txt, shapes.txt...)
+└── NYC_TransitPerformance/          # 14 tệp KPI điều hành (MTA_Performance_Agencies.csv, NYCT.csv, Metadata...)
 ```
 
 ### 2.1. Chi tiết các tệp dữ liệu chính & Khảo sát thực nghiệm
