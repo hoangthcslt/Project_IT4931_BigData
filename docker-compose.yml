@@ -1,0 +1,142 @@
+version: "3.8"
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.0
+    container_name: mta-zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - mta-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.0
+    container_name: mta-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - mta-network
+
+  namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: mta-namenode
+    ports:
+      - "9870:9870"
+      - "9000:9000"
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ./data:/data
+    environment:
+      - CLUSTER_NAME=mta-hdfs-cluster
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+      - HDFS_CONF_dfs_webhdfs_enabled=true
+      - HDFS_CONF_dfs_permissions_enabled=false
+    networks:
+      - mta-network
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: mta-datanode
+    depends_on:
+      - namenode
+    ports:
+      - "9864:9864"
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      - SERVICE_PRECONDITION=namenode:9870
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+      - HDFS_CONF_dfs_permissions_enabled=false
+    networks:
+      - mta-network
+
+  spark-master:
+    image: bitnami/spark:3.4.0
+    container_name: mta-spark-master
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - ./src:/opt/bitnami/spark/src
+      - ./data:/opt/bitnami/spark/data
+    networks:
+      - mta-network
+
+  spark-worker:
+    image: bitnami/spark:3.4.0
+    container_name: mta-spark-worker
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=4G
+      - SPARK_WORKER_CORES=2
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+    volumes:
+      - ./src:/opt/bitnami/spark/src
+      - ./data:/opt/bitnami/spark/data
+    networks:
+      - mta-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
+    container_name: mta-elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - mta-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.17.0
+    container_name: mta-kibana
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - mta-network
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  es_data:
+
+networks:
+  mta-network:
+    driver: bridge
