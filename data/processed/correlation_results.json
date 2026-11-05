@@ -1,0 +1,665 @@
+{
+  "summary_metrics": {
+    "records_joined": 42,
+    "lines_covered": 21,
+    "pearson_r_flow_vs_wait_assessment": -0.2566,
+    "pearson_r_turnstile_intensity_vs_wait_assessment": -0.131,
+    "pearson_r_flow_vs_otp_terminal": -0.1075,
+    "interpretation": "Negative correlation confirms that heavier passenger volume and turnstile crowding intensify dwell times at stations, directly reducing Subway Wait Assessment and Terminal OTP."
+  },
+  "line_summaries": [
+    {
+      "line": "1",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 11662442,
+      "avg_wait_assessment_pct": 79.5,
+      "avg_otp_terminal_pct": 76.3
+    },
+    {
+      "line": "2",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6843455,
+      "avg_wait_assessment_pct": 70.93,
+      "avg_otp_terminal_pct": 40.7
+    },
+    {
+      "line": "3",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6104541,
+      "avg_wait_assessment_pct": 76.38,
+      "avg_otp_terminal_pct": 63.05
+    },
+    {
+      "line": "4",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6849040,
+      "avg_wait_assessment_pct": 68.38,
+      "avg_otp_terminal_pct": 38.3
+    },
+    {
+      "line": "5",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6682529,
+      "avg_wait_assessment_pct": 65.45,
+      "avg_otp_terminal_pct": 37.85
+    },
+    {
+      "line": "6",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 13499430,
+      "avg_wait_assessment_pct": 65.09,
+      "avg_otp_terminal_pct": 43.75
+    },
+    {
+      "line": "7",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 8814220,
+      "avg_wait_assessment_pct": 72.67,
+      "avg_otp_terminal_pct": 75.8
+    },
+    {
+      "line": "A",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 7036356,
+      "avg_wait_assessment_pct": 72.64,
+      "avg_otp_terminal_pct": 65.7
+    },
+    {
+      "line": "B",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6441434,
+      "avg_wait_assessment_pct": 76.65,
+      "avg_otp_terminal_pct": 70.05
+    },
+    {
+      "line": "C",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 7349216,
+      "avg_wait_assessment_pct": 78.44,
+      "avg_otp_terminal_pct": 77.65
+    },
+    {
+      "line": "D",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 5964052,
+      "avg_wait_assessment_pct": 79.78,
+      "avg_otp_terminal_pct": 67.7
+    },
+    {
+      "line": "E",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6053388,
+      "avg_wait_assessment_pct": 74.6,
+      "avg_otp_terminal_pct": 68.5
+    },
+    {
+      "line": "F",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 8577152,
+      "avg_wait_assessment_pct": 73.51,
+      "avg_otp_terminal_pct": 57.9
+    },
+    {
+      "line": "G",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 2727996,
+      "avg_wait_assessment_pct": 83.31,
+      "avg_otp_terminal_pct": 80.2
+    },
+    {
+      "line": "J",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 2967026,
+      "avg_wait_assessment_pct": 76.91,
+      "avg_otp_terminal_pct": 65.7
+    },
+    {
+      "line": "L",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 5675642,
+      "avg_wait_assessment_pct": 75.66,
+      "avg_otp_terminal_pct": 89.2
+    },
+    {
+      "line": "M",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6478767,
+      "avg_wait_assessment_pct": 76.4,
+      "avg_otp_terminal_pct": 67.4
+    },
+    {
+      "line": "N",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 6157180,
+      "avg_wait_assessment_pct": 78.41,
+      "avg_otp_terminal_pct": 61.45
+    },
+    {
+      "line": "Q",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 5579833,
+      "avg_wait_assessment_pct": 78.36,
+      "avg_otp_terminal_pct": 68.6
+    },
+    {
+      "line": "R",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 8529248,
+      "avg_wait_assessment_pct": 75.44,
+      "avg_otp_terminal_pct": 60.5
+    },
+    {
+      "line": "Z",
+      "months_analyzed": 2,
+      "avg_monthly_passenger_flow": 2152522,
+      "avg_wait_assessment_pct": 76.91,
+      "avg_otp_terminal_pct": 65.7
+    }
+  ],
+  "monthly_line_records": [
+    {
+      "line": "1",
+      "year_month": "2016-01",
+      "total_passenger_flow": 19356026,
+      "peak_passenger_flow": 11601207,
+      "flow_per_turnstile": 32806.8,
+      "peak_concentration_ratio": 0.5994,
+      "subway_wait_assessment": 79.02,
+      "wait_assessment_target": 82.54,
+      "wait_assessment_deficit": 3.52,
+      "otp_terminal": 77.1
+    },
+    {
+      "line": "1",
+      "year_month": "2016-02",
+      "total_passenger_flow": 3968857,
+      "peak_passenger_flow": 3012829,
+      "flow_per_turnstile": 6726.9,
+      "peak_concentration_ratio": 0.7591,
+      "subway_wait_assessment": 79.99,
+      "wait_assessment_target": 82.54,
+      "wait_assessment_deficit": 2.55,
+      "otp_terminal": 75.5
+    },
+    {
+      "line": "2",
+      "year_month": "2016-01",
+      "total_passenger_flow": 11335486,
+      "peak_passenger_flow": 6858783,
+      "flow_per_turnstile": 15787.6,
+      "peak_concentration_ratio": 0.6051,
+      "subway_wait_assessment": 70.95,
+      "wait_assessment_target": 73.61,
+      "wait_assessment_deficit": 2.66,
+      "otp_terminal": 41.4
+    },
+    {
+      "line": "2",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2351424,
+      "peak_passenger_flow": 1761001,
+      "flow_per_turnstile": 3275.0,
+      "peak_concentration_ratio": 0.7489,
+      "subway_wait_assessment": 70.91,
+      "wait_assessment_target": 73.61,
+      "wait_assessment_deficit": 2.7,
+      "otp_terminal": 40.0
+    },
+    {
+      "line": "3",
+      "year_month": "2016-01",
+      "total_passenger_flow": 10130178,
+      "peak_passenger_flow": 5662737,
+      "flow_per_turnstile": 16940.1,
+      "peak_concentration_ratio": 0.559,
+      "subway_wait_assessment": 76.03,
+      "wait_assessment_target": 78.2,
+      "wait_assessment_deficit": 2.17,
+      "otp_terminal": 63.8
+    },
+    {
+      "line": "3",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2078904,
+      "peak_passenger_flow": 1446137,
+      "flow_per_turnstile": 3476.4,
+      "peak_concentration_ratio": 0.6956,
+      "subway_wait_assessment": 76.73,
+      "wait_assessment_target": 78.2,
+      "wait_assessment_deficit": 1.47,
+      "otp_terminal": 62.3
+    },
+    {
+      "line": "4",
+      "year_month": "2016-01",
+      "total_passenger_flow": 11306886,
+      "peak_passenger_flow": 6545957,
+      "flow_per_turnstile": 20119.0,
+      "peak_concentration_ratio": 0.5789,
+      "subway_wait_assessment": 68.09,
+      "wait_assessment_target": 74.03,
+      "wait_assessment_deficit": 5.94,
+      "otp_terminal": 40.2
+    },
+    {
+      "line": "4",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2391194,
+      "peak_passenger_flow": 1685096,
+      "flow_per_turnstile": 4254.8,
+      "peak_concentration_ratio": 0.7047,
+      "subway_wait_assessment": 68.67,
+      "wait_assessment_target": 74.03,
+      "wait_assessment_deficit": 5.36,
+      "otp_terminal": 36.4
+    },
+    {
+      "line": "5",
+      "year_month": "2016-01",
+      "total_passenger_flow": 11017314,
+      "peak_passenger_flow": 7010484,
+      "flow_per_turnstile": 17571.5,
+      "peak_concentration_ratio": 0.6363,
+      "subway_wait_assessment": 64.77,
+      "wait_assessment_target": 71.05,
+      "wait_assessment_deficit": 6.28,
+      "otp_terminal": 37.8
+    },
+    {
+      "line": "5",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2347744,
+      "peak_passenger_flow": 1799686,
+      "flow_per_turnstile": 3744.4,
+      "peak_concentration_ratio": 0.7666,
+      "subway_wait_assessment": 66.13,
+      "wait_assessment_target": 71.05,
+      "wait_assessment_deficit": 4.92,
+      "otp_terminal": 37.9
+    },
+    {
+      "line": "6",
+      "year_month": "2016-01",
+      "total_passenger_flow": 22310943,
+      "peak_passenger_flow": 15026361,
+      "flow_per_turnstile": 38869.2,
+      "peak_concentration_ratio": 0.6735,
+      "subway_wait_assessment": 65.8,
+      "wait_assessment_target": 76.99,
+      "wait_assessment_deficit": 11.19,
+      "otp_terminal": 45.5
+    },
+    {
+      "line": "6",
+      "year_month": "2016-02",
+      "total_passenger_flow": 4687918,
+      "peak_passenger_flow": 3849357,
+      "flow_per_turnstile": 8167.1,
+      "peak_concentration_ratio": 0.8211,
+      "subway_wait_assessment": 64.38,
+      "wait_assessment_target": 76.99,
+      "wait_assessment_deficit": 12.61,
+      "otp_terminal": 42.0
+    },
+    {
+      "line": "7",
+      "year_month": "2016-01",
+      "total_passenger_flow": 14638966,
+      "peak_passenger_flow": 8228686,
+      "flow_per_turnstile": 33886.5,
+      "peak_concentration_ratio": 0.5621,
+      "subway_wait_assessment": 73.01,
+      "wait_assessment_target": 78.97,
+      "wait_assessment_deficit": 5.96,
+      "otp_terminal": 78.0
+    },
+    {
+      "line": "7",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2989474,
+      "peak_passenger_flow": 2088658,
+      "flow_per_turnstile": 6920.1,
+      "peak_concentration_ratio": 0.6987,
+      "subway_wait_assessment": 72.33,
+      "wait_assessment_target": 78.97,
+      "wait_assessment_deficit": 6.64,
+      "otp_terminal": 73.6
+    },
+    {
+      "line": "A",
+      "year_month": "2016-01",
+      "total_passenger_flow": 11641635,
+      "peak_passenger_flow": 6691847,
+      "flow_per_turnstile": 16654.7,
+      "peak_concentration_ratio": 0.5748,
+      "subway_wait_assessment": 72.68,
+      "wait_assessment_target": 74.1,
+      "wait_assessment_deficit": 1.42,
+      "otp_terminal": 66.0
+    },
+    {
+      "line": "A",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2431078,
+      "peak_passenger_flow": 1716339,
+      "flow_per_turnstile": 3477.9,
+      "peak_concentration_ratio": 0.706,
+      "subway_wait_assessment": 72.59,
+      "wait_assessment_target": 74.1,
+      "wait_assessment_deficit": 1.51,
+      "otp_terminal": 65.4
+    },
+    {
+      "line": "B",
+      "year_month": "2016-01",
+      "total_passenger_flow": 10654624,
+      "peak_passenger_flow": 6354467,
+      "flow_per_turnstile": 17787.4,
+      "peak_concentration_ratio": 0.5964,
+      "subway_wait_assessment": 76.62,
+      "wait_assessment_target": 79.52,
+      "wait_assessment_deficit": 2.9,
+      "otp_terminal": 69.3
+    },
+    {
+      "line": "B",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2228243,
+      "peak_passenger_flow": 1628693,
+      "flow_per_turnstile": 3719.9,
+      "peak_concentration_ratio": 0.7309,
+      "subway_wait_assessment": 76.68,
+      "wait_assessment_target": 79.52,
+      "wait_assessment_deficit": 2.84,
+      "otp_terminal": 70.8
+    },
+    {
+      "line": "C",
+      "year_month": "2016-01",
+      "total_passenger_flow": 12175552,
+      "peak_passenger_flow": 6899544,
+      "flow_per_turnstile": 17748.6,
+      "peak_concentration_ratio": 0.5667,
+      "subway_wait_assessment": 77.84,
+      "wait_assessment_target": 83.44,
+      "wait_assessment_deficit": 5.6,
+      "otp_terminal": 78.3
+    },
+    {
+      "line": "C",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2522880,
+      "peak_passenger_flow": 1780379,
+      "flow_per_turnstile": 3677.7,
+      "peak_concentration_ratio": 0.7057,
+      "subway_wait_assessment": 79.05,
+      "wait_assessment_target": 83.44,
+      "wait_assessment_deficit": 4.39,
+      "otp_terminal": 77.0
+    },
+    {
+      "line": "D",
+      "year_month": "2016-01",
+      "total_passenger_flow": 9885664,
+      "peak_passenger_flow": 5879005,
+      "flow_per_turnstile": 18829.8,
+      "peak_concentration_ratio": 0.5947,
+      "subway_wait_assessment": 80.68,
+      "wait_assessment_target": 79.8,
+      "wait_assessment_deficit": -0.88,
+      "otp_terminal": 69.8
+    },
+    {
+      "line": "D",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2042441,
+      "peak_passenger_flow": 1517859,
+      "flow_per_turnstile": 3890.4,
+      "peak_concentration_ratio": 0.7432,
+      "subway_wait_assessment": 78.87,
+      "wait_assessment_target": 79.8,
+      "wait_assessment_deficit": 0.93,
+      "otp_terminal": 65.6
+    },
+    {
+      "line": "E",
+      "year_month": "2016-01",
+      "total_passenger_flow": 10003917,
+      "peak_passenger_flow": 5548838,
+      "flow_per_turnstile": 17612.5,
+      "peak_concentration_ratio": 0.5547,
+      "subway_wait_assessment": 74.8,
+      "wait_assessment_target": 75.33,
+      "wait_assessment_deficit": 0.53,
+      "otp_terminal": 68.9
+    },
+    {
+      "line": "E",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2102860,
+      "peak_passenger_flow": 1409272,
+      "flow_per_turnstile": 3702.2,
+      "peak_concentration_ratio": 0.6702,
+      "subway_wait_assessment": 74.4,
+      "wait_assessment_target": 75.33,
+      "wait_assessment_deficit": 0.93,
+      "otp_terminal": 68.1
+    },
+    {
+      "line": "F",
+      "year_month": "2016-01",
+      "total_passenger_flow": 14203809,
+      "peak_passenger_flow": 8200481,
+      "flow_per_turnstile": 22799.1,
+      "peak_concentration_ratio": 0.5773,
+      "subway_wait_assessment": 72.75,
+      "wait_assessment_target": 75.62,
+      "wait_assessment_deficit": 2.87,
+      "otp_terminal": 56.3
+    },
+    {
+      "line": "F",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2950495,
+      "peak_passenger_flow": 2110093,
+      "flow_per_turnstile": 4735.9,
+      "peak_concentration_ratio": 0.7152,
+      "subway_wait_assessment": 74.27,
+      "wait_assessment_target": 75.62,
+      "wait_assessment_deficit": 1.35,
+      "otp_terminal": 59.5
+    },
+    {
+      "line": "G",
+      "year_month": "2016-01",
+      "total_passenger_flow": 4553935,
+      "peak_passenger_flow": 2628417,
+      "flow_per_turnstile": 23353.5,
+      "peak_concentration_ratio": 0.5772,
+      "subway_wait_assessment": 83.35,
+      "wait_assessment_target": 82.57,
+      "wait_assessment_deficit": -0.78,
+      "otp_terminal": 79.1
+    },
+    {
+      "line": "G",
+      "year_month": "2016-02",
+      "total_passenger_flow": 902058,
+      "peak_passenger_flow": 662071,
+      "flow_per_turnstile": 4625.9,
+      "peak_concentration_ratio": 0.734,
+      "subway_wait_assessment": 83.27,
+      "wait_assessment_target": 82.57,
+      "wait_assessment_deficit": -0.7,
+      "otp_terminal": 81.3
+    },
+    {
+      "line": "J",
+      "year_month": "2016-01",
+      "total_passenger_flow": 4926334,
+      "peak_passenger_flow": 3100169,
+      "flow_per_turnstile": 15589.7,
+      "peak_concentration_ratio": 0.6293,
+      "subway_wait_assessment": 75.61,
+      "wait_assessment_target": 81.14,
+      "wait_assessment_deficit": 5.53,
+      "otp_terminal": 61.0
+    },
+    {
+      "line": "J",
+      "year_month": "2016-02",
+      "total_passenger_flow": 1007717,
+      "peak_passenger_flow": 790651,
+      "flow_per_turnstile": 3189.0,
+      "peak_concentration_ratio": 0.7846,
+      "subway_wait_assessment": 78.21,
+      "wait_assessment_target": 81.14,
+      "wait_assessment_deficit": 2.93,
+      "otp_terminal": 70.4
+    },
+    {
+      "line": "L",
+      "year_month": "2016-01",
+      "total_passenger_flow": 9523632,
+      "peak_passenger_flow": 4960839,
+      "flow_per_turnstile": 41587.9,
+      "peak_concentration_ratio": 0.5209,
+      "subway_wait_assessment": 75.11,
+      "wait_assessment_target": 82.08,
+      "wait_assessment_deficit": 6.97,
+      "otp_terminal": 88.2
+    },
+    {
+      "line": "L",
+      "year_month": "2016-02",
+      "total_passenger_flow": 1827653,
+      "peak_passenger_flow": 1265474,
+      "flow_per_turnstile": 7981.0,
+      "peak_concentration_ratio": 0.6924,
+      "subway_wait_assessment": 76.21,
+      "wait_assessment_target": 82.08,
+      "wait_assessment_deficit": 5.87,
+      "otp_terminal": 90.2
+    },
+    {
+      "line": "M",
+      "year_month": "2016-01",
+      "total_passenger_flow": 10729817,
+      "peak_passenger_flow": 6416244,
+      "flow_per_turnstile": 19687.7,
+      "peak_concentration_ratio": 0.598,
+      "subway_wait_assessment": 75.87,
+      "wait_assessment_target": 79.26,
+      "wait_assessment_deficit": 3.39,
+      "otp_terminal": 65.7
+    },
+    {
+      "line": "M",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2227717,
+      "peak_passenger_flow": 1620831,
+      "flow_per_turnstile": 4087.6,
+      "peak_concentration_ratio": 0.7276,
+      "subway_wait_assessment": 76.93,
+      "wait_assessment_target": 79.26,
+      "wait_assessment_deficit": 2.33,
+      "otp_terminal": 69.1
+    },
+    {
+      "line": "N",
+      "year_month": "2016-01",
+      "total_passenger_flow": 10283083,
+      "peak_passenger_flow": 5810512,
+      "flow_per_turnstile": 19042.7,
+      "peak_concentration_ratio": 0.5651,
+      "subway_wait_assessment": 78.42,
+      "wait_assessment_target": 80.73,
+      "wait_assessment_deficit": 2.31,
+      "otp_terminal": 61.7
+    },
+    {
+      "line": "N",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2031276,
+      "peak_passenger_flow": 1443850,
+      "flow_per_turnstile": 3761.6,
+      "peak_concentration_ratio": 0.7108,
+      "subway_wait_assessment": 78.41,
+      "wait_assessment_target": 80.73,
+      "wait_assessment_deficit": 2.32,
+      "otp_terminal": 61.2
+    },
+    {
+      "line": "Q",
+      "year_month": "2016-01",
+      "total_passenger_flow": 9273298,
+      "peak_passenger_flow": 5251264,
+      "flow_per_turnstile": 15690.9,
+      "peak_concentration_ratio": 0.5663,
+      "subway_wait_assessment": 77.47,
+      "wait_assessment_target": 79.28,
+      "wait_assessment_deficit": 1.81,
+      "otp_terminal": 65.5
+    },
+    {
+      "line": "Q",
+      "year_month": "2016-02",
+      "total_passenger_flow": 1886368,
+      "peak_passenger_flow": 1334908,
+      "flow_per_turnstile": 3191.8,
+      "peak_concentration_ratio": 0.7077,
+      "subway_wait_assessment": 79.25,
+      "wait_assessment_target": 79.28,
+      "wait_assessment_deficit": 0.03,
+      "otp_terminal": 71.7
+    },
+    {
+      "line": "R",
+      "year_month": "2016-01",
+      "total_passenger_flow": 14186115,
+      "peak_passenger_flow": 8009710,
+      "flow_per_turnstile": 17821.8,
+      "peak_concentration_ratio": 0.5646,
+      "subway_wait_assessment": 74.63,
+      "wait_assessment_target": 81.18,
+      "wait_assessment_deficit": 6.55,
+      "otp_terminal": 61.2
+    },
+    {
+      "line": "R",
+      "year_month": "2016-02",
+      "total_passenger_flow": 2872380,
+      "peak_passenger_flow": 2044893,
+      "flow_per_turnstile": 3608.5,
+      "peak_concentration_ratio": 0.7119,
+      "subway_wait_assessment": 76.24,
+      "wait_assessment_target": 81.18,
+      "wait_assessment_deficit": 4.94,
+      "otp_terminal": 59.8
+    },
+    {
+      "line": "Z",
+      "year_month": "2016-01",
+      "total_passenger_flow": 3570327,
+      "peak_passenger_flow": 2210923,
+      "flow_per_turnstile": 12705.8,
+      "peak_concentration_ratio": 0.6192,
+      "subway_wait_assessment": 75.61,
+      "wait_assessment_target": 81.14,
+      "wait_assessment_deficit": 5.53,
+      "otp_terminal": 61.0
+    },
+    {
+      "line": "Z",
+      "year_month": "2016-02",
+      "total_passenger_flow": 734716,
+      "peak_passenger_flow": 565155,
+      "flow_per_turnstile": 2614.6,
+      "peak_concentration_ratio": 0.7692,
+      "subway_wait_assessment": 78.21,
+      "wait_assessment_target": 81.14,
+      "wait_assessment_deficit": 2.93,
+      "otp_terminal": 70.4
+    }
+  ]
+}

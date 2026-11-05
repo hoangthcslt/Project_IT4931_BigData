@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 2012 Developer Edition (Trial) 10.1.0.4095 (http://www.liquid-technologies.com) -->
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="PERFORMANCE">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="INDICATOR">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" name="INDICATOR_SEQ" type="xs:unsignedInt" />
+              <xs:element minOccurs="0" name="PARENT_SEQ" />
+              <xs:element minOccurs="0" name="AGENCY_NAME" type="xs:string" />
+              <xs:element minOccurs="0" name="INDICATOR_NAME" type="xs:string" />
+              <xs:element minOccurs="0" name="DESCRIPTION" type="xs:string" />
+              <xs:element minOccurs="0" name="CATEGORY" type="xs:string" />
+              <xs:element minOccurs="0" name="FREQUENCY" type="xs:string" />
+              <xs:element minOccurs="0" name="DESIRED_CHANGE" type="xs:string" />
+              <xs:element minOccurs="0" name="INDICATOR_UNIT" type="xs:string" />
+              <xs:element minOccurs="0" name="DECIMAL_PLACES" type="xs:unsignedByte" />
+              <xs:element minOccurs="0" maxOccurs="unbounded" name="YEAR">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="0" name="PERIOD_YEAR" type="xs:unsignedShort" />
+                    <xs:element minOccurs="0" maxOccurs="unbounded" name="MONTH">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element minOccurs="0" name="PERIOD_MONTH" type="xs:unsignedByte" />
+                          <xs:element minOccurs="0" name="MONTHLYVALUES">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element minOccurs="0" name="YTD_TARGET" type="xs:decimal" />
+                                <xs:element minOccurs="0" name="YTD_ACTUAL" type="xs:decimal" />
+                                <xs:element minOccurs="0" name="MONTHLY_TARGET" type="xs:decimal" />
+                                <xs:element minOccurs="0" name="MONTHLY_ACTUAL" type="xs:decimal" />
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

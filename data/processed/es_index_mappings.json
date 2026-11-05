@@ -1,0 +1,217 @@
+{
+  "mta-station-clusters": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "station_id": {
+          "type": "keyword"
+        },
+        "stop_name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "borough": {
+          "type": "keyword"
+        },
+        "daytime_routes": {
+          "type": "keyword"
+        },
+        "latitude": {
+          "type": "double"
+        },
+        "longitude": {
+          "type": "double"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "cluster_id": {
+          "type": "integer"
+        },
+        "archetype": {
+          "type": "keyword"
+        },
+        "estimated_daily_flow": {
+          "type": "double"
+        },
+        "silhouette_score": {
+          "type": "double"
+        }
+      }
+    }
+  },
+  "mta-turnstile-baseline": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "station_id": {
+          "type": "keyword"
+        },
+        "stop_name": {
+          "type": "keyword"
+        },
+        "borough": {
+          "type": "keyword"
+        },
+        "daytime_routes": {
+          "type": "keyword"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "day_of_week": {
+          "type": "integer"
+        },
+        "hour_bucket": {
+          "type": "integer"
+        },
+        "mean_flow_15m": {
+          "type": "double"
+        },
+        "std_flow_15m": {
+          "type": "double"
+        },
+        "mean_flow_4h": {
+          "type": "double"
+        },
+        "sample_count": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "mta-realtime-flow": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "station_id": {
+          "type": "keyword"
+        },
+        "stop_name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "borough": {
+          "type": "keyword"
+        },
+        "daytime_routes": {
+          "type": "keyword"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "window_start": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||strict_date_optional_time"
+        },
+        "window_end": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||strict_date_optional_time"
+        },
+        "entries_15m": {
+          "type": "integer"
+        },
+        "exits_15m": {
+          "type": "integer"
+        },
+        "flow_rate_15m": {
+          "type": "double"
+        },
+        "baseline_mean_15m": {
+          "type": "double"
+        },
+        "baseline_std_15m": {
+          "type": "double"
+        },
+        "z_score": {
+          "type": "double"
+        },
+        "alert_status": {
+          "type": "keyword"
+        },
+        "heatmap_color": {
+          "type": "keyword"
+        },
+        "is_critical_alert": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "mta-congestion-alerts": {
+    "settings": {
+      "number_of_shards": 1,
+      "number_of_replicas": 0
+    },
+    "mappings": {
+      "properties": {
+        "station_id": {
+          "type": "keyword"
+        },
+        "stop_name": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword"
+            }
+          }
+        },
+        "borough": {
+          "type": "keyword"
+        },
+        "daytime_routes": {
+          "type": "keyword"
+        },
+        "location": {
+          "type": "geo_point"
+        },
+        "window_start": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||strict_date_optional_time"
+        },
+        "window_end": {
+          "type": "date",
+          "format": "yyyy-MM-dd HH:mm:ss||strict_date_optional_time"
+        },
+        "flow_rate_15m": {
+          "type": "double"
+        },
+        "baseline_mean_15m": {
+          "type": "double"
+        },
+        "baseline_std_15m": {
+          "type": "double"
+        },
+        "z_score": {
+          "type": "double"
+        },
+        "alert_status": {
+          "type": "keyword"
+        },
+        "heatmap_color": {
+          "type": "keyword"
+        },
+        "is_critical_alert": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

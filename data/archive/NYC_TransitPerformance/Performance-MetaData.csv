@@ -1,0 +1,30 @@
+Peformance Data Definitions,,,,
+,,,,
+Data Field,Define,Characters,Description,Sample Values
+INDICATOR_SEQ,Numeric,20,A unique indentifying sequence number associated with a KPI.,74039
+PARENT_SEQ,Numeric,20,This indicates that the KPI is a Sun-Indicator and contains the indicator sequence value of the Parent  KPI. ,20438
+AGENCY_NAME,Alpha,50,This identifies the agency asscoiated with the KPI. ,"Bridges and Tunnels, Long Island Rail Road, MTA Bus, Metro-North Railroad, NYC Transit"
+INDICATOR_NAME,Alpha,100,This a short name of the KPI,Mean Distance Between Failures
+DESCRIPTION,Alpha,4000,This is a full description of the KPI,The percent of commuter trains that arrive at their destinations within 5 minutes and 59 seconds of the scheduled time.
+CATEGORY,Alpha,25,"KPIs can fall under the following three categories: Safety Indicators, Service Indicators and Financial Indicators. ","Safety Indicators, Service Indicators, Financial Indicators"
+FREQUENCY,Alpha,1,"This field indicates how often data for a given indicator is reported:
+monthly, quarterly, bi-annually, or annually.","A = Annual
+M = Monthly
+Q = Quarterly
+S = Semi-Annual"
+DESIRED_CHANGE,Alpha,1,"The direction of a performance trend that is considered positive or “good news.” Up or Down trends can be considered ""good news"" depending on the KPI.","D = Down
+N = Neutral
+U = Up
+"
+INDICATOR_UNIT,Alpha,1,"A measure of the progress toward achieving a Business Unit’s goal. Each indicator will have a description and associated values which may be a
+number, percent, dollar, or amount or time.","$ = Dollars
+% = Percentage
+- = Number
+"
+DECIMAL_PLACES,Numeric,1,The number of decimal places that should be printed or shown for the indicator value (to the right of the decimal point).,2 = two decemial places
+PERIOD_YEAR,Numeric,20,This is the year of the reported KPI value,2009
+PERIOD_MONTH,Numeric,20,This is the month of the reported KPI value,4 (April)
+YTD_TARGET,Numeric,20.2,This is the expected YTD target value for for each month.,1.03
+YTD_TARGET,Numeric,20.2,This is the expected YTD actual value for for each month.,0.94
+MONTHY_TARGET,Numeric,20.2,This is the expected MONTHLY target value for for each month.,1.18
+MONTHY_ACTUAL,Numeric,20.2,This is the expected MONTHLY actual value for for each month.,0.97
