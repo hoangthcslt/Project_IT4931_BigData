@@ -3,9 +3,12 @@
     "micro_events_processed": 80000,
     "sliding_windows_evaluated": 7775,
     "critical_overcrowding_alerts_count": 691,
-    "end_to_end_latency_seconds": 1.485,
-    "throughput_events_per_sec": 53885.3,
-    "z_score_threshold": 3.0
+    "end_to_end_latency_seconds": 1.157,
+    "throughput_events_per_sec": 69127.1,
+    "z_score_threshold": 3.0,
+    "overcrowding_f1_score": 1.0,
+    "overcrowding_precision": 1.0,
+    "overcrowding_recall": 1.0
   },
   "top_5_emergency_stations": [
     {

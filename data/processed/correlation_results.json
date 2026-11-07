@@ -2,6 +2,7 @@
   "summary_metrics": {
     "records_joined": 147,
     "lines_covered": 21,
+    "xml_nyct_indicators_verified": 84,
     "pearson_r_flow_vs_wait_assessment": -0.2276,
     "pearson_r_turnstile_intensity_vs_wait_assessment": 0.0025,
     "pearson_r_flow_vs_otp_terminal": -0.111,

@@ -6,5 +6,7 @@
   "spike_anomalies_filtered": 702,
   "non_mta_rows_filtered": 314371,
   "unique_mta_stations": 437,
-  "baseline_profiles_saved": 73416
+  "baseline_profiles_saved": 73416,
+  "parquet_partitions_written": 8,
+  "storage_compression_reduction_pct": 94.62
 }

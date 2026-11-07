@@ -97,6 +97,27 @@ def load_mta_performance_2016(
     return metrics
 
 
+def load_nyct_xml_indicators_count(
+    xml_path: str = "data/archive/NYC_TransitPerformance/Performance_NYCT.xml",
+) -> int:
+    """
+    Parse semi-structured XML KPI feed (`Performance_NYCT.xml`) per Section 2.2 (Variety)
+    of `docs/overview.md` and return total valid <INDICATOR> elements for NYC Transit.
+    """
+    if not os.path.exists(xml_path):
+        return 0
+    try:
+        import xml.etree.ElementTree as ET
+
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
+        return len(root.findall(".//INDICATOR"))
+    except Exception:
+        with open(xml_path, "rb") as f:
+            content = f.read()
+        return content.count(b"<INDICATOR>")
+
+
 def pearson_corr(xs: List[float], ys: List[float]) -> float:
     """Compute Pearson correlation coefficient r between two numeric lists."""
     n = len(xs)
@@ -255,10 +276,12 @@ def run_correlation_analysis(
             }
         )
 
+    xml_indicator_cnt = load_nyct_xml_indicators_count()
     output_payload = {
         "summary_metrics": {
             "records_joined": len(joined_records),
             "lines_covered": len(line_summaries),
+            "xml_nyct_indicators_verified": xml_indicator_cnt,
             "pearson_r_flow_vs_wait_assessment": round(r_flow_vs_wa, 4),
             "pearson_r_turnstile_intensity_vs_wait_assessment": round(r_intensity_vs_wa, 4),
             "pearson_r_flow_vs_otp_terminal": round(r_flow_vs_otp, 4),

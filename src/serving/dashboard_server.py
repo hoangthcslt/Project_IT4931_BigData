@@ -599,7 +599,37 @@ def generate_html_dashboard(
 
 
 def generate_kibana_saved_objects(output_ndjson: str = "docs/kibana_dashboard.ndjson") -> str:
-    """Export Kibana 7.17 Saved Objects NDJSON (index patterns & dashboard definition)."""
+    """Export Kibana 7.17 Saved Objects NDJSON (index patterns, 4 visualizations & dashboard)."""
+    panels = [
+        {
+            "version": "7.17.0",
+            "gridData": {"x": 0, "y": 0, "w": 28, "h": 18, "i": "1"},
+            "panelIndex": "1",
+            "embeddableConfig": {},
+            "panelRefName": "panel_1",
+        },
+        {
+            "version": "7.17.0",
+            "gridData": {"x": 28, "y": 0, "w": 20, "h": 18, "i": "2"},
+            "panelIndex": "2",
+            "embeddableConfig": {},
+            "panelRefName": "panel_2",
+        },
+        {
+            "version": "7.17.0",
+            "gridData": {"x": 0, "y": 18, "w": 24, "h": 14, "i": "3"},
+            "panelIndex": "3",
+            "embeddableConfig": {},
+            "panelRefName": "panel_3",
+        },
+        {
+            "version": "7.17.0",
+            "gridData": {"x": 24, "y": 18, "w": 24, "h": 14, "i": "4"},
+            "panelIndex": "4",
+            "embeddableConfig": {},
+            "panelRefName": "panel_4",
+        },
+    ]
     objects = [
         {
             "id": "mta-station-clusters-pattern",
@@ -617,17 +647,64 @@ def generate_kibana_saved_objects(output_ndjson: str = "docs/kibana_dashboard.nd
             "attributes": {"title": "mta-congestion-alerts*", "timeFieldName": "window_end"},
         },
         {
+            "id": "mta-live-geo-heatmap",
+            "type": "map",
+            "attributes": {
+                "title": "NYC Subway Real-Time Geo-Point Congestion Heatmap",
+                "description": "Live station crowding status (Green=Normal, Yellow=Moderate, Red=Critical Z>3.0)",
+                "layerListJSON": json.dumps(
+                    [
+                        {
+                            "id": "mta-geo-layer",
+                            "type": "elasticsearch_documents",
+                            "sourceDescriptor": {"indexPatternId": "mta-realtime-flow-pattern", "geoField": "location"},
+                        }
+                    ]
+                ),
+            },
+        },
+        {
+            "id": "mta-top5-emergency-table",
+            "type": "visualization",
+            "attributes": {
+                "title": "Top 5 Emergency Overcrowded Stations (Z-Score > 3.0)",
+                "visState": json.dumps({"title": "Top 5 Emergency Stations", "type": "table"}),
+            },
+        },
+        {
+            "id": "mta-kmeans-archetype-pie",
+            "type": "visualization",
+            "attributes": {
+                "title": "Spark MLlib K-Means Station Archetype Distribution",
+                "visState": json.dumps({"title": "K-Means Archetypes (K=3)", "type": "pie"}),
+            },
+        },
+        {
+            "id": "mta-flow-timeline",
+            "type": "visualization",
+            "attributes": {
+                "title": "15-Minute Sliding Window Passenger Flow vs Baseline Threshold",
+                "visState": json.dumps({"title": "15m Sliding Window Flow", "type": "line"}),
+            },
+        },
+        {
             "id": "mta-nyc-subway-live-dashboard",
             "type": "dashboard",
             "attributes": {
                 "title": "NYC Transit Real-Time Passenger Flow & Overcrowding Heatmap",
                 "description": "Lambda Architecture Live Geo Heatmap, K-Means Station Archetypes & Z-Score Emergency Alerts",
-                "panelsJSON": "[]",
+                "panelsJSON": json.dumps(panels),
                 "optionsJSON": '{"useMargins":true,"hidePanelTitles":false}',
                 "timeRestore": True,
                 "timeTo": "now",
                 "timeFrom": "now-24h",
             },
+            "references": [
+                {"name": "panel_1", "type": "map", "id": "mta-live-geo-heatmap"},
+                {"name": "panel_2", "type": "visualization", "id": "mta-top5-emergency-table"},
+                {"name": "panel_3", "type": "visualization", "id": "mta-kmeans-archetype-pie"},
+                {"name": "panel_4", "type": "visualization", "id": "mta-flow-timeline"},
+            ],
         },
     ]
     os.makedirs(os.path.dirname(os.path.abspath(output_ndjson)), exist_ok=True)

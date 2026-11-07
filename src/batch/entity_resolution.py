@@ -426,12 +426,37 @@ def normalize_station_name(name: str) -> str:
 class StationEntityResolver:
     """Resolves raw Turnstile (STATION, LINENAME, DIVISION) into MTA_StationLocations metadata."""
 
-    def __init__(self, locations_csv_path: str = "data/archive/MTA_StationLocations.csv"):
+    def __init__(
+        self,
+        locations_csv_path: str = "data/archive/MTA_StationLocations.csv",
+        gtfs_stops_path: str = "data/archive/NYC_TransitSubway/stops.txt",
+    ):
         self.locations_csv_path = locations_csv_path
+        self.gtfs_stops_path = gtfs_stops_path
         self.stations: List[Dict[str, str]] = []
+        self.gtfs_parent_stations: Dict[str, Dict[str, str]] = {}
         self._indexed_locations: List[Tuple[Dict[str, str], str, Set[str], Set[str]]] = []
         self._cache: Dict[Tuple[str, str, str], Optional[Dict[str, str]]] = {}
+        self._load_gtfs_parent_stations()
         self._load_locations()
+
+    def _load_gtfs_parent_stations(self) -> None:
+        """Load GTFS stops.txt and filter location_type == '1' (Parent Stations) per docs/overview.md."""
+        if not os.path.exists(self.gtfs_stops_path):
+            return
+        with open(self.gtfs_stops_path, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row.get("location_type", "").strip() == "1":
+                    stop_id = row.get("stop_id", "").strip()
+                    if stop_id:
+                        self.gtfs_parent_stations[stop_id] = {
+                            "stop_id": stop_id,
+                            "stop_name": row.get("stop_name", "").strip(),
+                            "stop_lat": row.get("stop_lat", "").strip(),
+                            "stop_lon": row.get("stop_lon", "").strip(),
+                            "location_type": "1",
+                        }
 
     def _load_locations(self) -> None:
         if not os.path.exists(self.locations_csv_path):
@@ -544,10 +569,14 @@ class StationEntityResolver:
             self._cache[cache_key] = None
             return None
 
+        gtfs_id = best_match["GTFS Stop ID"]
+        gtfs_parent = self.gtfs_parent_stations.get(gtfs_id, {})
         resolved = {
             "station_id": best_match["Station ID"],
             "complex_id": best_match["Complex ID"],
-            "gtfs_stop_id": best_match["GTFS Stop ID"],
+            "gtfs_stop_id": gtfs_id,
+            "gtfs_parent_name": gtfs_parent.get("stop_name", best_match["Stop Name"]),
+            "gtfs_location_type": gtfs_parent.get("location_type", "1"),
             "stop_name": best_match["Stop Name"],
             "borough": best_match["Borough"],
             "daytime_routes": best_match["Daytime Routes"],
