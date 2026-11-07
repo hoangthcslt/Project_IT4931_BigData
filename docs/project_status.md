@@ -10,7 +10,10 @@
 
 ## 1. TỔNG QUAN HIỆN TRẠNG (WHERE WE ARE NOW)
 
-Dự án đã hoàn thành **Giai đoạn 1 (Đặc tả kiến trúc & Khảo sát dữ liệu)** và **Giai đoạn 2 (Xây dựng toàn bộ Pipeline mã nguồn 4 tầng Lambda Architecture + Kiểm thử thực nghiệm cục bộ)**.
+Dự án đã hoàn thành **toàn bộ 3 giai đoạn kỹ thuật cốt lõi**:
+* **Giai đoạn 1:** Đặc tả kiến trúc Lambda & Khảo sát thực nghiệm dữ liệu nguồn.
+* **Giai đoạn 2:** Xây dựng trọn vẹn Pipeline mã nguồn 4 tầng (`Ingestion`, `Batch`, `Speed`, `Serving`) với cơ chế **Dual-Engine (Zero-Heavy-Dependency)** không cần cài `venv` nặng máy.
+* **Giai đoạn 3:** Chạy thực nghiệm **Full-Scale trên toàn bộ 27 tệp tuần (5.254.533 dòng)**, xuất bộ 4 biểu đồ báo cáo (`docs/figures/*.png`), xây dựng **Interactive Live Web Dashboard** (`docs/live_dashboard.html`), kịch bản chạy 1-chạm (`run_pipeline.ps1`) và vượt qua **7/7 bài kiểm thử tự động `pytest` (100% PASSED)**.
 
 ### Trạng thái từng hạng mục:
 
@@ -51,12 +54,13 @@ Project_IT4931_BigData/
 │       └── fig4_speed_layer_zscore_alerts.png
 ├── data/
 │   ├── archive/                        # Dữ liệu gốc MTA (Turnstile 27 tuần, Locations, GTFS, Performance)
-│   └── processed/                      # Dữ liệu đầu ra đã chạy kiểm chứng:
+│   └── processed/                      # Dữ liệu đầu ra Full-Scale 27 tuần (5,25 triệu dòng):
+│       ├── clean_turnstile_summary.json# Thống kê phễu làm sạch 5.254.533 dòng (4.883.723 dòng hợp lệ)
 │       ├── es_index_mappings.json      # Schema 4 chỉ mục Elasticsearch (kèm geo_point)
-│       ├── station_baseline.json       # 72.912 hồ sơ lịch sử (Mean, Std theo trạm/thứ/giờ)
-│       ├── station_clusters.json       # Kết quả phân cụm K-Means 434 trạm (Silhouette = 0.6089)
-│       ├── correlation_results.json    # Kết quả tương quan lưu lượng vs Subway Wait Assessment 2016
-│       └── realtime_alerts.json        # Kết quả Sliding Window 15m, Top 5 trạm quá tải & 150 cảnh báo Z>3
+│       ├── station_baseline.json       # 73.416 hồ sơ lịch sử (Mean, Std theo 437 trạm/thứ/giờ)
+│       ├── station_clusters.json       # Kết quả phân cụm K-Means 437 trạm (Silhouette = 0.6777)
+│       ├── correlation_results.json    # Tương quan 147 bản ghi tháng-tuyến trên 21 tuyến tàu năm 2016
+│       └── realtime_alerts.json        # Kết quả Sliding Window 15m (80.000 micro-events, 691 cảnh báo Z>3)
 ├── src/
 │   ├── ingestion/
 │   │   ├── flow_interpolator.py        # Nội suy chu kỳ 4h thành micro-events theo giờ cao điểm + Poisson
@@ -89,34 +93,34 @@ Một điểm thiết kế quan trọng của mã nguồn hiện tại là **m�
 
 ---
 
-## 4. CẦN LÀM GÌ TIẾP THEO? (NEXT STEPS FOR DEVELOPERS / AGENTS)
+## 4. HƯỚNG DẪN CHẠY DEMO & CÁC CÔNG VIỆC TIẾP THEO (NEXT STEPS FOR TEAM / AGENTS)
 
-Nếu bạn là thành viên tiếp nhận repo hoặc là AI Coding Agent được giao nhiệm vụ tiếp theo, dưới đây là các hạng mục có thể triển khai tiếp:
+Toàn bộ phần lập trình, xử lý dữ liệu Full-Scale 27 tuần, kiểm thử tự động (`pytest`) và Dashboard trực quan hóa đã hoàn tất 100%. Khi thành viên khác hoặc AI Coding Agent tiếp nhận dự án, dưới đây là cách vận hành và các bước chuẩn bị bảo vệ đồ án:
 
-### Ưu tiên 1: Chạy thực nghiệm Full-Scale trên toàn bộ 27 tệp Turnstile (5,18 triệu dòng)
-* Hiện tại các tệp trong `data/processed/` được sinh nhanh từ tập mẫu (`--max-files 4` và `--max-files 6`) để kiểm thử tức thời.
-* Để chạy trên **toàn bộ 27 tệp tuần (5,18 triệu dòng)**, chỉ cần bỏ tham số `--max-files`:
-  ```bash
-  python src/batch/clean_turnstile.py --engine local
-  python src/batch/kmeans_clustering.py --engine local
-  python src/batch/correlation_analysis.py
-  python src/streaming/stream_processor.py --engine local --max-events 100000
+### 4.1. Cách chạy Demo & Kiểm thử 1-chạm (Không cần cài `venv` hay bật Docker)
+* Chạy toàn bộ quy trình kiểm chứng và tự động mở giao diện **Interactive Live Web Dashboard**:
+  ```powershell
+  .\run_pipeline.ps1
+  ```
+* Hoặc khởi chạy Dashboard dưới dạng **FastAPI Live Server** tại `http://127.0.0.1:8050`:
+  ```powershell
+  python src/serving/dashboard_server.py --serve
+  ```
+* Chạy bộ 7 bài kiểm thử nghiệm thu tự động (`7/7 PASSED`):
+  ```powershell
+  python -m pytest tests/ -v
   ```
 
-### Ưu tiên 2: Khởi chạy cụm Docker Compose & Đồng bộ lên Kibana Dashboard
-1. Bật Docker Desktop (cấp tối thiểu 8GB RAM) và chạy:
-   ```bash
-   docker compose up -d
-   ```
-2. Khởi tạo các chỉ mục `geo_point` và đẩy toàn bộ dữ liệu từ `data/processed/*.json` vào Elasticsearch:
-   ```bash
-   python src/serving/es_indexer.py --init-index --sync-all
-   ```
-3. Mở Kibana tại `http://localhost:5601`, tạo Index Patterns (`mta-station-clusters*`, `mta-realtime-flow*`, `mta-congestion-alerts*`) và thiết kế **Kibana Maps Heatmap** + **Top 5 Emergency Stations Table**, sau đó xuất file cấu hình giao diện lưu vào `docs/kibana_dashboard.ndjson`.
-
-### Ưu tiên 3: Viết Unit Tests & Tự động hóa kịch bản Demo
-* Tạo thư mục `tests/` (dùng `pytest`) để kiểm thử tự động:
-  * Kiểm thử `StationEntityResolver` đạt 100% trên 459 trạm MTA và lọc sạch trạm PATH/RIT.
-  * Kiểm thử bộ lọc counter rollover ($\Delta < 0$) và spike ($\Delta > 7.200 \times \Delta t_{hours}$).
-  * Kiểm thử công thức Z-Score ($\text{Z-Score} > 3.0 \implies \text{CRITICAL\_OVERCROWDING\_ALERT}$).
-* Tạo script một chạm `run_pipeline.ps1` / `run_pipeline.sh` để chạy tuần tự từ Bước 1 đến Bước 4 khi thuyết trình bảo vệ đồ án.
+### 4.2. Các hạng mục tùy chọn tiếp theo (Khi chuẩn bị báo cáo & bảo vệ đồ án)
+1. **Triển khai thực tế trên cụm Docker Compose (Khi demo hạ tầng container):**
+   * Bật Docker Desktop (RAM $\ge 8\text{ GB}$) và khởi chạy 8 container:
+     ```bash
+     docker compose up -d
+     ```
+   * Đẩy toàn bộ dữ liệu từ `data/processed/*.json` vào cụm Elasticsearch thật:
+     ```bash
+     python src/serving/es_indexer.py --init-index --sync-all
+     ```
+   * Mở Kibana tại `http://localhost:5601` $\rightarrow$ `Stack Management` $\rightarrow$ `Saved Objects` $\rightarrow$ `Import` tệp `docs/kibana_dashboard.ndjson`.
+2. **Soạn thảo Báo cáo tổng kết (Word / LaTeX) & Slide thuyết trình:**
+   * Sử dụng trực tiếp bộ 4 biểu đồ độ phân giải cao trong `docs/figures/` (`fig1` $\rightarrow$ `fig4`) và bảng số liệu thực nghiệm Full-Scale 27 tuần trong `data/processed/clean_turnstile_summary.json`, `station_clusters.json`, `correlation_results.json`, `realtime_alerts.json`.
