@@ -15,6 +15,10 @@
 [![Elasticsearch](https://img.shields.io/badge/Elasticsearch-7.17.0-005571?logo=elasticsearch&logoColor=white)](https://www.elastic.co/)
 [![Kibana](https://img.shields.io/badge/Kibana-7.17.0-005571?logo=kibana&logoColor=white)](https://www.elastic.co/kibana)
 [![Docker](https://img.shields.io/badge/Docker_Compose-Containerized-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Live Dashboard](https://img.shields.io/badge/🌐_Live_Interactive_Dashboard-Click_to_Open_Online-10b981?style=for-the-badge)](https://raw.githack.com/hoangthcslt/Project_IT4931_BigData/main/docs/live_dashboard.html)
+
+> 🚀 **Trải nghiệm trực tiếp Interactive Live Web Dashboard ngay trên trình duyệt (Không cần cài đặt hay chạy Docker):**  
+> 👉 **[Mở Live Subway Heatmap & Alert Dashboard (Online via GitHack CDN)](https://raw.githack.com/hoangthcslt/Project_IT4931_BigData/main/docs/live_dashboard.html)** | **[Link dự phòng (GitHub HTML Preview)](https://htmlpreview.github.io/?https://github.com/hoangthcslt/Project_IT4931_BigData/blob/main/docs/live_dashboard.html)**
 
 ---
 
@@ -196,22 +200,10 @@ Toàn bộ mã nguồn trong `src/` được thiết kế theo kiến trúc **Du
 python -m pytest tests/ -v
 ```
 
----
-
-## 📈 8. Kết quả thực nghiệm Full-Scale (27 Tuần - 5.254.533 Dòng)
-
-![K-Means 24h Profiles](docs/figures/fig1_kmeans_24h_profiles.png)
-
-![NYC Subway Geo Clusters & Alerts](docs/figures/fig2_nyc_subway_geo_clusters.png)
-
-![Wait Assessment Correlation](docs/figures/fig3_wait_assessment_correlation.png)
-
-![Speed Layer Z-Score Alerts & Hygiene Funnel](docs/figures/fig4_speed_layer_zscore_alerts.png)
-
-### 7.4. Chạy luồng xử lý
+### 7.4. Chạy luồng xử lý trên cụm Spark & Kafka
 ```bash
 # Bước 1: Khởi tạo chỉ mục Elasticsearch với mapping geo_point
-python src/serving/es_indexer.py --init-index
+python src/serving/es_indexer.py --init-index --sync-all
 
 # Bước 2: Chạy Batch Processing trên Spark để tính baseline lịch sử và lưu HDFS
 spark-submit --master spark://localhost:7077 src/batch/clean_turnstile.py
@@ -226,14 +218,33 @@ python src/ingestion/kafka_producer.py --mode interpolate --rate 3000
 ```
 
 ### 7.5. Truy cập Dashboard & Công cụ quản trị
-* **Kibana Dashboard:** [http://localhost:5601](http://localhost:5601) *(Bản đồ nhiệt không gian mạng lưới metro New York)*
-* **Spark Master UI:** [http://localhost:8080](http://localhost:8080) *(Giám sát tiến trình Spark jobs)*
-* **Hadoop HDFS NameNode:** [http://localhost:9870](http://localhost:9870) *(Kiểm tra các tệp Parquet lưu trữ phân tán)*
-* **Elasticsearch REST API:** [http://localhost:9200](http://localhost:9200)
+
+* **🌐 Truy cập Online Trực tiếp (Dành cho người xem bên ngoài, không cần cài đặt):**
+  * **Interactive Live Web Dashboard (GitHack CDN):** **[Bấm vào đây để mở Dashboard Online](https://raw.githack.com/hoangthcslt/Project_IT4931_BigData/main/docs/live_dashboard.html)** *(Bản đồ nhiệt Leaflet.js 437 nhà ga, bộ lọc Quận/Cụm, Top cảnh báo đỏ Z-Score > 3.0 & Biểu đồ 24h)*
+  * **Interactive Live Web Dashboard (GitHub HTML Preview):** **[Mở qua HTMLPreview](https://htmlpreview.github.io/?https://github.com/hoangthcslt/Project_IT4931_BigData/blob/main/docs/live_dashboard.html)**
+  * **Mã nguồn Dashboard trong Repo:** [`docs/live_dashboard.html`](docs/live_dashboard.html)
+* **🖥️ Các cổng dịch vụ nội bộ (Chỉ dùng khi bạn tự bật `docker compose up -d` hoặc FastAPI trên máy cá nhân):**
+  * FastAPI Live Dashboard Server: `http://localhost:8050` *(khi chạy `python src/serving/dashboard_server.py --serve`)*
+  * Kibana Dashboard: `http://localhost:5601` *(import tệp [`docs/kibana_dashboard.ndjson`](docs/kibana_dashboard.ndjson))*
+  * Spark Master UI: `http://localhost:8080`
+  * Hadoop HDFS NameNode: `http://localhost:9870`
+  * Elasticsearch REST API: `http://localhost:9200`
 
 ---
 
-## 🎯 8. Tiêu chuẩn đánh giá & Nghiệm thu (Evaluation Criteria)
+## 📈 8. Kết quả thực nghiệm Full-Scale (27 Tuần - 5.254.533 Dòng)
+
+![K-Means 24h Profiles](docs/figures/fig1_kmeans_24h_profiles.png)
+
+![NYC Subway Geo Clusters & Alerts](docs/figures/fig2_nyc_subway_geo_clusters.png)
+
+![Wait Assessment Correlation](docs/figures/fig3_wait_assessment_correlation.png)
+
+![Speed Layer Z-Score Alerts & Hygiene Funnel](docs/figures/fig4_speed_layer_zscore_alerts.png)
+
+---
+
+## 🎯 9. Tiêu chuẩn đánh giá & Nghiệm thu (Evaluation Criteria)
 
 * **Kỹ thuật Big Data (Engineering Metrics):**
   * Thông lượng luồng (Throughput): Đạt **3.000 – 5.000 events/giây**.
