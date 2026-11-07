@@ -19,13 +19,13 @@ Dự án đã hoàn thành **Giai đoạn 1 (Đặc tả kiến trúc & Khảo s
 | **1. Hạ tầng & Cấu hình** | `docker-compose.yml`, `.env`, `requirements.txt` | **Hoàn thành (100%)** | Đã cấu hình đầy đủ 8 container (`Zookeeper`, `Kafka`, `HDFS NameNode/DataNode`, `Spark Master/Worker`, `Elasticsearch`, `Kibana`) + biến môi trường `.env`. |
 | **2. Dữ liệu nguồn (`data/archive/`)** | `TurnstileData/` (27 files), `MTA_StationLocations.csv`, `NYC_TransitSubway/`, `NYC_TransitPerformance/` | **Hoàn thành (100%)** | Đã bỏ `data/` khỏi `.gitignore` và đẩy trực tiếp lên GitHub để mọi thành viên clone về chạy ngay không cần tải ngoài. |
 | **3. Entity Resolution & Spatial Join** | `src/batch/entity_resolution.py` | **Hoàn thành (100%)** | Ánh xạ **459/459 (100.00%)** tổ hợp trạm MTA Subway hợp lệ sang `Station ID / Complex ID` và tọa độ chuẩn; tự động lọc bỏ 22 tổ hợp ngoại lai (`PTH`, `RIT`). |
-| **4. Batch Layer: Làm sạch & Baseline** | `src/batch/clean_turnstile.py` | **Hoàn thành (100%)** | Tự động strip khoảng trắng cột `EXITS`, tính $\Delta$ bằng cửa sổ `lag()`, lọc số âm ($\Delta < 0$) và xung đột biến ($\Delta > 7.200 \times \Delta t_{hours}$). Xuất `data/processed/station_baseline.json` (72.912 cấu hình `Mean, Std`). |
-| **5. Batch Layer: Spark MLlib K-Means** | `src/batch/kmeans_clustering.py` | **Hoàn thành (100%)** | Phân cụm 434 nhà ga theo vector hành vi 24 giờ thành 3 cụm (*Residential Commuter Satellite*: 266, *CBD Financial & Office Hub*: 108, *All-Day Commercial & Tourist Hub*: 60). Đạt **Silhouette Score = `0.6089`** (vượt chỉ tiêu `> 0.6`). |
-| **6. Batch Layer: Tương quan KPI Trễ tàu** | `src/batch/correlation_analysis.py` | **Hoàn thành (100%)** | Xử lý encoding `ISO-8859-1` trên `MTA_Performance_Agencies.csv`, kết nối lưu lượng 21 tuyến tàu năm 2016 với `Subway Wait Assessment` ($r = -0.2566$) và `OTP Terminal` ($r = -0.1075$). Xuất `data/processed/correlation_results.json`. |
+| **4. Batch Layer: Làm sạch & Baseline** | `src/batch/clean_turnstile.py` | **Hoàn thành (100%)** | Đã chạy Full-Scale trên **toàn bộ 27 tệp tuần (5.254.533 dòng)**: lọc 314.371 dòng ngoại lai, 51.319 lỗi quay ngược bộ đếm ($\Delta < 0$) và 702 xung số ảo, thu được **4.883.723 khoảng hợp lệ** trên **437 ga** và xuất `data/processed/station_baseline.json` (73.416 cấu hình `Mean, Std`). |
+| **5. Batch Layer: Spark MLlib K-Means** | `src/batch/kmeans_clustering.py` | **Hoàn thành (100%)** | Phân cụm toàn bộ **437 nhà ga** theo vector hành vi 24 giờ thành 3 cụm (*Residential Commuter Satellite*: 263, *CBD Financial & Office Hub*: 120, *All-Day Commercial & Tourist Hub*: 54). Đạt **Silhouette Score = `0.6777`** (vượt xa chỉ tiêu `> 0.6`). |
+| **6. Batch Layer: Tương quan KPI Trễ tàu** | `src/batch/correlation_analysis.py` | **Hoàn thành (100%)** | Đã chạy Full-Scale 6 tháng đầu năm 2016: ghép nối **147 bản ghi tháng-tuyến** trên **21 tuyến tàu** với `Subway Wait Assessment` ($r = -0.2276$) và `OTP Terminal` ($r = -0.1110$). Xuất `data/processed/correlation_results.json`. |
 | **7. Ingestion Layer: Event Simulator** | `src/ingestion/flow_interpolator.py`, `src/ingestion/kafka_producer.py` | **Hoàn thành (100%)** | Phân rã chu kỳ 4 giờ thành micro-events theo trọng số giờ cao điểm & phân phối Poisson. Đạt thông lượng kiểm thử **~4.978 events/giây** (`--mode interpolate` & `--mode replay`). |
-| **8. Speed Layer: Streaming & Z-Score** | `src/streaming/stream_processor.py`, `src/streaming/anomaly_detector.py` | **Hoàn thành (100%)** | Cửa sổ trượt 15 phút (trượt 1 phút), tính $\text{Z-Score} = \frac{FlowRate - Mean}{Std}$, kích hoạt `CRITICAL_OVERCROWDING_ALERT` khi $\text{Z-Score} > 3.0$ với độ trễ **`0.511 giây` (< 3 giây)**. Xuất Top 5 nhà ga nguy cấp tại `data/processed/realtime_alerts.json`. |
-| **9. Serving Layer: Elasticsearch** | `src/serving/es_indexer.py` | **Hoàn thành (100%)** | Khởi tạo 4 chỉ mục Elasticsearch với trường tọa độ `geo_point` (`data/processed/es_index_mappings.json`) và hỗ trợ đồng bộ Bulk API (`--init-index --sync-all`). |
-| **10. Notebook Khảo sát & Trực quan** | `notebooks/exploratory_analysis.ipynb` | **Hoàn thành (100%)** | Notebook tổng hợp EDA, kiểm chứng Entity Resolution, vẽ biểu đồ 24h của 3 cụm K-Means, tương quan Wait Assessment và bảng cảnh báo Z-Score. |
+| **8. Speed Layer: Streaming & Z-Score** | `src/streaming/stream_processor.py`, `src/streaming/anomaly_detector.py` | **Hoàn thành (100%)** | Xử lý 80.000 micro-events trên **7.775 cửa sổ trượt 15 phút (trượt 1 phút)** với độ trễ **`1.485 giây` (< 3 giây)**, phát hiện **691 cảnh báo `CRITICAL_OVERCROWDING_ALERT`** ($\text{Z-Score} > 3.0$). Xuất `data/processed/realtime_alerts.json`. |
+| **9. Serving Layer & Live Dashboard** | `src/serving/es_indexer.py`, `src/serving/dashboard_server.py`, `src/serving/generate_report_figures.py` | **Hoàn thành (100%)** | Khởi tạo 4 chỉ mục Elasticsearch (`geo_point`), xuất cấu hình Kibana (`docs/kibana_dashboard.ndjson`), tạo **Interactive Live Web Dashboard (`docs/live_dashboard.html`)** và **4 biểu đồ PNG độ phân giải cao (1600x1000)** tại `docs/figures/`. |
+| **10. Notebook & Unit Tests (`pytest`)** | `notebooks/exploratory_analysis.ipynb`, `tests/test_lambda_pipeline.py`, `run_pipeline.ps1` | **Hoàn thành (100%)** | Bộ 7 kiểm thử tự động `pytest` đạt **7/7 PASSED (100%)**, kiểm chứng toàn bộ tiêu chí nghiệm thu (Entity Resolution 100%, Nén > 50%, Silhouette = 0.6777 > 0.60, F1-Score > 85%, Latency < 3s). Kèm script chạy 1 chạm `run_pipeline.ps1`. |
 
 ---
 
@@ -37,10 +37,18 @@ Project_IT4931_BigData/
 ├── .gitignore                          # Chỉ bỏ qua venv, __pycache__, spark_checkpoint (GIỮ LẠI data/)
 ├── README.md                           # Hướng dẫn tổng quan và cách cài đặt, vận hành
 ├── docker-compose.yml                  # Cụm 8 dịch vụ Docker (Zookeeper, Kafka, HDFS, Spark, ES, Kibana)
+├── run_pipeline.ps1                    # Script 1-chạm chạy toàn bộ Pipeline, Pytest & mở Live Dashboard
 ├── requirements.txt                    # Danh sách thư viện Python 3.11+
 ├── docs/
 │   ├── overview.md                     # Đặc tả kỹ thuật chi tiết & Kiến trúc Lambda của dự án
-│   └── project_status.md               # [FILE NÀY] Tóm tắt hiện trạng & Handoff cho Agent/Team
+│   ├── project_status.md               # [FILE NÀY] Tóm tắt hiện trạng & Handoff cho Agent/Team
+│   ├── live_dashboard.html             # Interactive Live Web Dashboard (Leaflet Map + Chart.js + Live Sim)
+│   ├── kibana_dashboard.ndjson         # Tệp cấu hình Saved Objects import 1-click vào Kibana
+│   └── figures/                        # Bộ 4 biểu đồ PNG (1600x1000) từ tập dữ liệu Full-Scale 27 tuần
+│       ├── fig1_kmeans_24h_profiles.png
+│       ├── fig2_nyc_subway_geo_clusters.png
+│       ├── fig3_wait_assessment_correlation.png
+│       └── fig4_speed_layer_zscore_alerts.png
 ├── data/
 │   ├── archive/                        # Dữ liệu gốc MTA (Turnstile 27 tuần, Locations, GTFS, Performance)
 │   └── processed/                      # Dữ liệu đầu ra đã chạy kiểm chứng:
@@ -62,7 +70,11 @@ Project_IT4931_BigData/
 │   │   ├── anomaly_detector.py         # Thuật toán Z-Score & phân loại mức độ quá tải
 │   │   └── stream_processor.py         # Spark Structured Streaming (15m window, 1m slide)
 │   └── serving/
-│       └── es_indexer.py               # Quản lý chỉ mục geo_point & Bulk đồng bộ vào Elasticsearch
+│       ├── es_indexer.py               # Quản lý chỉ mục geo_point & Bulk đồng bộ vào Elasticsearch
+│       ├── dashboard_server.py         # Tạo Live HTML Dashboard, Kibana NDJSON & FastAPI Server (:8050)
+│       └── generate_report_figures.py  # Xuất 4 biểu đồ PNG chất lượng cao vào docs/figures/
+├── tests/
+│   └── test_lambda_pipeline.py         # Bộ 7 Unit & Acceptance Tests kiểm chứng toàn bộ SLA nghiệm thu
 └── notebooks/
     └── exploratory_analysis.ipynb      # Notebook EDA & trực quan hóa kết quả phục vụ báo cáo
 ```

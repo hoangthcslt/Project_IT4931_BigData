@@ -1,0 +1,4 @@
+{"id": "mta-station-clusters-pattern", "type": "index-pattern", "attributes": {"title": "mta-station-clusters*", "timeFieldName": ""}}
+{"id": "mta-realtime-flow-pattern", "type": "index-pattern", "attributes": {"title": "mta-realtime-flow*", "timeFieldName": "window_end"}}
+{"id": "mta-congestion-alerts-pattern", "type": "index-pattern", "attributes": {"title": "mta-congestion-alerts*", "timeFieldName": "window_end"}}
+{"id": "mta-nyc-subway-live-dashboard", "type": "dashboard", "attributes": {"title": "NYC Transit Real-Time Passenger Flow & Overcrowding Heatmap", "description": "Lambda Architecture Live Geo Heatmap, K-Means Station Archetypes & Z-Score Emergency Alerts", "panelsJSON": "[]", "optionsJSON": "{\"useMargins\":true,\"hidePanelTitles\":false}", "timeRestore": true, "timeTo": "now", "timeFrom": "now-24h"}}

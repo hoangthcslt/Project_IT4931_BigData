@@ -275,9 +275,10 @@ def run_local_fallback_job(
         files = files[:max_files]
 
     print(f"[Batch Clean - Local Engine] Processing {len(files)} turnstile files...")
-    prev_state: Dict[Tuple[str, str, str, str], Tuple[datetime, int, int]] = {}
+    prev_state: Dict[Tuple[str, str, str, str], Tuple[float, int, int]] = {}
     station_window_totals: Dict[Tuple[str, int, int, str], int] = defaultdict(int)
     station_meta: Dict[str, Dict[str, object]] = {}
+    ts_cache: Dict[Tuple[str, str], Optional[Tuple[float, int, int]]] = {}
 
     total_rows = 0
     valid_rows = 0
@@ -310,14 +311,27 @@ def run_local_fallback_job(
                 try:
                     entries = int(row[9].strip())
                     exits = int(row[10].strip())
-                    ts = datetime.strptime(f"{date_str} {time_str}", "%m/%d/%Y %H:%M:%S")
                 except ValueError:
                     continue
 
+                dt_key = (date_str, time_str)
+                if dt_key not in ts_cache:
+                    try:
+                        parsed_dt = datetime.strptime(f"{date_str} {time_str}", "%m/%d/%Y %H:%M:%S")
+                        dow_val = (parsed_dt.isoweekday() % 7) + 1
+                        hb_val = (parsed_dt.hour // 4) * 4
+                        ts_cache[dt_key] = (parsed_dt.timestamp(), dow_val, hb_val)
+                    except ValueError:
+                        ts_cache[dt_key] = None
+                cached_ts = ts_cache[dt_key]
+                if cached_ts is None:
+                    continue
+                ts_epoch, dow, hour_bucket = cached_ts
+
                 key = (ca, unit, scp, raw_station)
                 if key in prev_state:
-                    prev_ts, prev_entries, prev_exits = prev_state[key]
-                    delta_hours = (ts - prev_ts).total_seconds() / 3600.0
+                    prev_epoch, prev_entries, prev_exits = prev_state[key]
+                    delta_hours = (ts_epoch - prev_epoch) / 3600.0
                     if delta_hours <= 0:
                         continue
                     d_entries = entries - prev_entries
@@ -332,15 +346,12 @@ def run_local_fallback_job(
                         valid_rows += 1
                         st_id = resolved["station_id"]
                         station_meta[st_id] = resolved
-                        # Spark dayofweek convention: 1=Sunday, 2=Monday, ..., 7=Saturday
-                        dow = (ts.isoweekday() % 7) + 1
-                        hour_bucket = (ts.hour // 4) * 4
                         date_win_key = f"{date_str}_{hour_bucket:02d}"
                         station_window_totals[(st_id, dow, hour_bucket, date_win_key)] += (
                             d_entries + d_exits
                         )
 
-                prev_state[key] = (ts, entries, exits)
+                prev_state[key] = (ts_epoch, entries, exits)
 
     # Group by (station_id, dow, hour_bucket) to compute Mean & Std
     grouped_flows: Dict[Tuple[str, int, int], List[float]] = defaultdict(list)
@@ -381,6 +392,7 @@ def run_local_fallback_job(
         json.dump(baseline_rows, f, indent=2)
 
     summary = {
+        "files_processed": len(files),
         "total_rows_read": total_rows,
         "valid_interval_rows": valid_rows,
         "rollover_anomalies_filtered": rollover_anomalies,
@@ -389,6 +401,9 @@ def run_local_fallback_job(
         "unique_mta_stations": len(station_meta),
         "baseline_profiles_saved": len(baseline_rows),
     }
+    summary_path = os.path.join(os.path.dirname(os.path.abspath(baseline_output)), "clean_turnstile_summary.json")
+    with open(summary_path, "w", encoding="utf-8") as sf:
+        json.dump(summary, sf, indent=2)
     print(f"[Batch Clean Summary] {json.dumps(summary, indent=2)}")
     return summary
 

@@ -1,0 +1,10 @@
+{
+  "files_processed": 27,
+  "total_rows_read": 5254533,
+  "valid_interval_rows": 4883723,
+  "rollover_anomalies_filtered": 51319,
+  "spike_anomalies_filtered": 702,
+  "non_mta_rows_filtered": 314371,
+  "unique_mta_stations": 437,
+  "baseline_profiles_saved": 73416
+}

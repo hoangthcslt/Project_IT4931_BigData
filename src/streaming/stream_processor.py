@@ -307,6 +307,16 @@ def run_local_sliding_window_simulation(
         if len(top_5_emergency) >= 5:
             break
 
+    # If fewer than 5 distinct stations crossed Z > 3.0 in the initial slice, fill remaining slots with next highest Z-score stations
+    if len(top_5_emergency) < 5:
+        all_sorted = sorted(evaluated_windows, key=lambda x: float(x["z_score"]), reverse=True)
+        for cand in all_sorted:
+            if cand["station_id"] not in top_stations_seen:
+                top_stations_seen.add(cand["station_id"])
+                top_5_emergency.append(cand)
+            if len(top_5_emergency) >= 5:
+                break
+
     elapsed_sec = time.perf_counter() - t0
     payload = {
         "streaming_metrics": {

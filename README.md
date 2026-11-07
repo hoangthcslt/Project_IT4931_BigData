@@ -130,29 +130,41 @@ Hệ thống được đóng gói và vận hành qua Docker Compose:
 
 ```
 Project_IT4931_BigData/
+├── .env
 ├── .gitignore
 ├── README.md
 ├── docker-compose.yml              # Cấu hình cụm dịch vụ phân tán (Zookeeper, Kafka, HDFS, Spark, ES, Kibana)
+├── run_pipeline.ps1                # Script 1-chạm chạy Pipeline, Pytest và mở Interactive Live Dashboard
+├── requirements.txt                # Danh sách thư viện (chỉ cần khi cài mới hoàn toàn)
 ├── data/
-│   └── archive/                    # Tập dữ liệu nguồn (Turnstile, MTA Locations, GTFS, Performance)
+│   ├── archive/                    # Tập dữ liệu nguồn (Turnstile 27 tuần, MTA Locations, GTFS, Performance)
+│   └── processed/                  # Kết quả thực nghiệm Full-Scale 5.25M dòng (Baseline, K-Means, Alerts, Correlation)
 ├── docs/
-│   └── overview.md                 # Tài liệu đặc tả kỹ thuật và kế hoạch chi tiết của dự án
+│   ├── overview.md                 # Tài liệu đặc tả kỹ thuật và kiến trúc chi tiết của dự án
+│   ├── project_status.md           # Tóm tắt hiện trạng & Handoff Guide cho thành viên / AI Agent
+│   ├── live_dashboard.html         # Interactive Live Web Dashboard (Leaflet Map + Chart.js + Stream Sim)
+│   ├── kibana_dashboard.ndjson     # Cấu hình Saved Objects import 1-click vào Kibana
+│   └── figures/                    # Bộ 4 biểu đồ báo cáo độ phân giải cao (1600x1000 PNG)
 ├── src/
 │   ├── ingestion/
 │   │   ├── kafka_producer.py       # Event Simulator phát luồng vào Kafka topic
 │   │   └── flow_interpolator.py    # Thuật toán phân rã lưu lượng 4h thành micro-events
 │   ├── batch/
-│   │   ├── clean_turnstile.py      # PySpark job làm sạch công tơ mét & ghi Parquet HDFS
-│   │   ├── entity_resolution.py    # Module ánh xạ tên trạm sang Station ID chuẩn
-│   │   ├── kmeans_clustering.py    # Spark MLlib phân cụm 470 nhà ga metro
+│   │   ├── clean_turnstile.py      # PySpark / Local job làm sạch công tơ mét & tính Baseline
+│   │   ├── entity_resolution.py    # Module ánh xạ 100% tên trạm sang Station ID chuẩn
+│   │   ├── kmeans_clustering.py    # Spark MLlib K-Means phân cụm 437 nhà ga metro
 │   │   └── correlation_analysis.py # Phân tích tương quan lưu lượng với MTA Wait Assessment
 │   ├── streaming/
-│   │   ├── stream_processor.py     # Spark Structured Streaming đọc Kafka, tính sliding window
+│   │   ├── stream_processor.py     # Spark Structured Streaming đọc Kafka, tính sliding window 15m
 │   │   └── anomaly_detector.py     # Thuật toán Z-Score phát hiện bất thường quá tải
 │   └── serving/
-│       └── es_indexer.py           # Đồng bộ Batch Views & Real-time Alerts vào Elasticsearch
+│       ├── es_indexer.py           # Đồng bộ Batch Views & Real-time Alerts vào Elasticsearch
+│       ├── dashboard_server.py     # Tạo Live Web Dashboard & chạy FastAPI Server (:8050)
+│       └── generate_report_figures.py # Xuất 4 biểu đồ báo cáo từ kết quả Full-Scale
+├── tests/
+│   └── test_lambda_pipeline.py     # Bộ 7 kiểm thử tự động Unit & Acceptance Tests (pytest)
 └── notebooks/
-    └── exploratory_analysis.ipynb  # Khảo sát dữ liệu mẫu và trực quan hóa kết quả K-Means
+    └── exploratory_analysis.ipynb  # Khảo sát dữ liệu và trực quan hóa kết quả K-Means & Z-Score
 ```
 
 ---
@@ -173,18 +185,28 @@ docker compose up -d
 docker compose ps
 ```
 
-### 7.3. Thiết lập môi trường Python & dependencies
-```bash
-# Tạo và kích hoạt môi trường ảo
-python -m venv venv
-# Trên Windows:
-.\venv\Scripts\activate
-# Trên Linux/macOS:
-source venv/bin/activate
+### 7.3. Chạy nhanh không cần tạo `venv` nặng máy (Zero-Heavy-Dependency Mode)
+Toàn bộ mã nguồn trong `src/` được thiết kế theo kiến trúc **Dual-Engine**: các thư viện nặng (như cụm Spark, Kafka, HDFS, Elasticsearch) đã được đóng gói trong Docker, còn chế độ chạy cục bộ (`--engine local` / `--engine auto`) sử dụng trực tiếp Python chuẩn sẵn có trên máy mà **không cần tạo thư mục `venv` nặng hàng GB**:
 
-# Cài đặt các thư viện cần thiết
-pip install -r requirements.txt
+```powershell
+# Chạy 1-chạm toàn bộ kiểm thử, cập nhật Dashboard và mở giao diện trực quan:
+.\run_pipeline.ps1
+
+# Hoặc chạy kiểm thử tự động 7 tiêu chí nghiệm thu bằng pytest:
+python -m pytest tests/ -v
 ```
+
+---
+
+## 📈 8. Kết quả thực nghiệm Full-Scale (27 Tuần - 5.254.533 Dòng)
+
+![K-Means 24h Profiles](docs/figures/fig1_kmeans_24h_profiles.png)
+
+![NYC Subway Geo Clusters & Alerts](docs/figures/fig2_nyc_subway_geo_clusters.png)
+
+![Wait Assessment Correlation](docs/figures/fig3_wait_assessment_correlation.png)
+
+![Speed Layer Z-Score Alerts & Hygiene Funnel](docs/figures/fig4_speed_layer_zscore_alerts.png)
 
 ### 7.4. Chạy luồng xử lý
 ```bash

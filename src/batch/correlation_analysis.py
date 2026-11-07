@@ -128,7 +128,9 @@ def run_correlation_analysis(
     line_month_flow: Dict[Tuple[str, str], float] = defaultdict(float)
     line_month_peak_flow: Dict[Tuple[str, str], float] = defaultdict(float)
     line_turnstiles: Dict[str, set] = defaultdict(set)
-    prev_state: Dict[Tuple[str, str, str, str], Tuple[datetime, int, int]] = {}
+    prev_state: Dict[Tuple[str, str, str, str], Tuple[float, int, int]] = {}
+    ts_cache: Dict[Tuple[str, str], Optional[Tuple[float, int, str, bool]]] = {}
+    routes_cache: Dict[str, List[str]] = {}
 
     for fpath in files:
         with open(fpath, mode="r", encoding="utf-8", errors="ignore") as f:
@@ -146,35 +148,52 @@ def run_correlation_analysis(
                 try:
                     entries = int(row[9].strip())
                     exits = int(row[10].strip())
-                    ts = datetime.strptime(f"{date_str} {time_str}", "%m/%d/%Y %H:%M:%S")
                 except ValueError:
                     continue
 
-                if ts.year != 2016:
-                    prev_state[(ca, unit, scp, st)] = (ts, entries, exits)
+                dt_key = (date_str, time_str)
+                if dt_key not in ts_cache:
+                    try:
+                        parsed_dt = datetime.strptime(f"{date_str} {time_str}", "%m/%d/%Y %H:%M:%S")
+                        is_pk = parsed_dt.weekday() < 5 and parsed_dt.hour in (7, 8, 9, 10, 11, 12, 16, 17, 18, 19, 20)
+                        ts_cache[dt_key] = (
+                            parsed_dt.timestamp(),
+                            parsed_dt.year,
+                            parsed_dt.strftime("%Y-%m"),
+                            is_pk,
+                        )
+                    except ValueError:
+                        ts_cache[dt_key] = None
+                cached_dt = ts_cache[dt_key]
+                if cached_dt is None:
+                    continue
+                ts_epoch, ts_year, yyyy_mm, is_peak = cached_dt
+
+                if ts_year != 2016:
+                    prev_state[(ca, unit, scp, st)] = (ts_epoch, entries, exits)
                     continue
 
                 key = (ca, unit, scp, st)
                 if key in prev_state:
-                    prev_ts, prev_e, prev_x = prev_state[key]
-                    dh = (ts - prev_ts).total_seconds() / 3600.0
+                    prev_epoch, prev_e, prev_x = prev_state[key]
+                    dh = (ts_epoch - prev_epoch) / 3600.0
                     de = entries - prev_e
                     dx = exits - prev_x
                     max_allowed = MAX_RATE_PER_HOUR * max(dh, 1.0)
                     if 0 < dh <= 24.0 and 0 <= de <= max_allowed and 0 <= dx <= max_allowed:
                         flow = de + dx
-                        yyyy_mm = ts.strftime("%Y-%m")
-                        routes = [ch for ch in linename if ch in SUBWAY_LINES]
+                        if linename not in routes_cache:
+                            routes_cache[linename] = [ch for ch in linename if ch in SUBWAY_LINES]
+                        routes = routes_cache[linename]
                         if routes:
                             share = flow / len(routes)
-                            is_peak = ts.weekday() < 5 and ts.hour in (7, 8, 9, 10, 11, 12, 16, 17, 18, 19, 20)
                             for r_code in routes:
                                 line_month_flow[(r_code, yyyy_mm)] += share
                                 line_turnstiles[r_code].add(key)
                                 if is_peak:
                                     line_month_peak_flow[(r_code, yyyy_mm)] += share
 
-                prev_state[key] = (ts, entries, exits)
+                prev_state[key] = (ts_epoch, entries, exits)
 
     joined_records = []
     for (line_code, yyyy_mm), kpi in sorted(perf_data.items()):
